@@ -12,11 +12,31 @@ class Controller:
         self._listCountry = []
 
     def fillDD(self):
-        pass
+        self._listCountry = self._model.getNazioni()
+        for c in self._listCountry:
+            self._view.ddcountry.options.append(ft.dropdown.Option(c))
+
+        self._listYear = self._model.getAnni()
+        for a in self._listYear:
+            self._view.ddyear.options.append(ft.dropdown.Option(a))
+
 
 
     def handle_graph(self, e):
-        pass
+        nazioneSelezionata = self._view.ddcountry.value
+        annoSelezionato = self._view.ddyear.value
+        if nazioneSelezionata == "":
+            self._view.create_alert(ft.Text("Non hai inserito la nazione"))
+            return
+        if annoSelezionato == "":
+            self._view.create_alert(ft.Text("Non hai inserito l'anno"))
+            return
+        self._model.buildGraph(nazioneSelezionata, annoSelezionato)
+        nodi = self._model.getNumNodes()
+        archi = self._model.getNumEdges()
+        self._view.txt_result.controls.append(ft.Text(f"Numero di vertici: {nodi} Numero di archi: {archi}"))
+        self._view.update_page()
+
 
 
 
